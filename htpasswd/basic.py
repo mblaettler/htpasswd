@@ -2,6 +2,7 @@ from builtins import object
 from crypt import crypt
 from string import ascii_letters, digits
 from random import choice
+from importlib import import_module
 import subprocess
 try:
     from collections import OrderedDict
@@ -36,6 +37,8 @@ class Basic(object):
     It is passed the path to userdb file. """
 
     def __init__(self, userdb, mode="crypt"):
+        if mode == "bcrypt":
+            self.bcrypt = import_module("bcrypt")
         self.encryption_mode = mode
         self.userdb = userdb
         self.initial_users = OrderedDict()
@@ -93,6 +96,8 @@ class Basic(object):
             return self._md5_password(password)
         elif self.encryption_mode.lower() == 'md5-base':
             return self._md5_base_password(password)
+        elif self.encryption_mode.lower() == 'bcrypt':
+            return self._bcrypt_password(password)
         else:
             raise UnknownEncryptionMode(self.encryption_mode)
 
@@ -120,3 +125,8 @@ class Basic(object):
                                         'passwd',
                                         '-1',
                                         password]).decode('utf-8').strip()
+
+    def _bcrypt_password(self, password):
+        """ Crypts password using bcrypt encryption """
+
+        return self.bcrypt.hashpw(password.encode("utf-8"), self.bcrypt.gensalt()).decode("utf-8")

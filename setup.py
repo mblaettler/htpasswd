@@ -16,6 +16,9 @@ setup(
     version="2.3",
     packages=["htpasswd"],
     install_requires=requires,
+    extras_require={
+      'bcrypt': ["bcrypt"],
+    },
     author="Ilya Otyutskiy",
     author_email="ilya.otyutskiy@icloud.com",
     maintainer="Ilya Otyutskiy",

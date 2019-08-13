@@ -1,12 +1,13 @@
 # htpasswd [![Build Status](https://secure.travis-ci.org/thesharp/htpasswd.png)](http://travis-ci.org/thesharp/htpasswd)
 
 ## Description
-**htpasswd** is a library for working with htpasswd user (only basic authorization) and group files. It supports CRYPT, MD5 (based) and MD5 (apache variant, 'apr1') encryption methods. To actually use MD5 encryption method you *MUST* have an ``openssl`` binary installed into system ``$PATH``.
+**htpasswd** is a library for working with htpasswd user (only basic authorization) and group files. It supports CRYPT, BCRYPT, MD5 (based) and MD5 (apache variant, 'apr1') encryption methods. To actually use MD5 encryption method you *MUST* have an ``openssl`` binary installed into system ``$PATH``. For BCRYPT support it is required to install additional dependencies. Use `pip install htpasswd[bcrypt]` to do so.
 
 ## Dependencies
 - Python 2.7 or 3.3 or 3.4
 - [orderedmultidict](http://pypi.python.org/pypi/orderedmultidict/0.7) >= 0.7
 - [future](https://pypi.python.org/pypi/future)
+- [bcrypt](https://pypi.org/project/bcrypt/) (for bcrypt support)
 - [nose](http://pypi.python.org/pypi/nose/) >= 1.1.2 (for tests)
 
 ## Sample usage
@@ -39,6 +40,10 @@ To use MD5 apache variant encryption, add ``mode="md5"`` to the constructor:
 or use ``md5-base`` for MD5 based encryotion:
 
     with htpasswd.Basic("/path/to/user.db", mode="md5-base") as userdb
+
+or use ``bcrypt`` for BCRYPT based encryotion:
+
+with htpasswd.Basic("/path/to/user.db", mode="bcrypt") as userdb
 
 ## Provided methods
 
@@ -75,4 +80,4 @@ Raised by ``Group.add_user`` if user is already in a group.
 Raised by ``Group.delete_user`` if user isn't in a group.
 
 ### UnknownEncryptionMode
-Raised by _encrypt_password if mode is not 'crypt', 'md5' or 'md5-base'.
+Raised by _encrypt_password if mode is not 'crypt', 'bcrypt', 'md5' or 'md5-base'.
